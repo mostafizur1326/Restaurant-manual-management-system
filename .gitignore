@@ -1,0 +1,30 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Runtime data (IMPORTANT for your project)
+data/menu.json
+data/orders.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build output (if exists in future)
+dist/
+build/
+
+
+git init
+git add .
+git commit -m "deploy"
+git branch -M main
+git remote add origin https://github.com/your-username/your-repo.git
+git push -u origin main

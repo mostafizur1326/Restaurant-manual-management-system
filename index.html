@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aurora Dining Menu</title>
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="menu-shell">
+    <section class="hero" aria-label="Restaurant menu introduction">
+      <div class="hero__media" aria-hidden="true"></div>
+      <div class="hero__content">
+        <p class="eyebrow">Digital Dining Menu</p>
+        <h1>Aurora</h1>
+        <p class="hero__copy">A refined QR menu experience with chef-selected dishes, clear pricing, and a calm luxury atmosphere.</p>
+        <div class="hero__meta" aria-label="Restaurant highlights">
+          <span>Open Daily</span>
+          <span>11:00 AM - 11:30 PM</span>
+          <span>Freshly Prepared</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="toolbar" aria-label="Menu controls">
+      <label class="search-box">
+        <span>Search menu</span>
+        <input id="searchInput" type="search" placeholder="Search dishes..." autocomplete="off">
+      </label>
+      <nav class="category-tabs" id="categoryTabs" aria-label="Menu categories"></nav>
+    </section>
+
+    <section class="menu-list" aria-label="Menu items">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Menu</p>
+          <h2>Names & Prices</h2>
+        </div>
+        <button class="admin-access" id="adminAccessButton" type="button">Admin</button>
+      </div>
+      <div id="menuItems" class="items-grid"></div>
+      <p id="emptyState" class="empty-state" hidden>No matching menu items found.</p>
+    </section>
+
+    <section class="order-cart" id="orderCart" aria-label="Customer order cart">
+      <div class="order-cart__header">
+        <div>
+          <p class="eyebrow">Your Order</p>
+          <h2>Order Summary</h2>
+        </div>
+        <strong id="cartTotal">$0.00</strong>
+      </div>
+      <div id="cartItems" class="cart-items"></div>
+      <p id="cartEmpty" class="empty-state">Your cart is empty. Add items from the menu.</p>
+      <form class="order-form" id="orderForm">
+        <label class="form-field">
+          <span>Name</span>
+          <input id="customerName" type="text" placeholder="Customer name" required>
+        </label>
+        <label class="form-field">
+          <span>Table number</span>
+          <input id="tableNumber" type="text" placeholder="Example: 7" required>
+        </label>
+        <label class="form-field form-field--wide">
+          <span>Order note</span>
+          <textarea id="orderNote" placeholder="Optional note for kitchen"></textarea>
+        </label>
+        <button class="primary-button" type="submit">Submit Order</button>
+      </form>
+      <p class="order-message" id="orderMessage" hidden></p>
+    </section>
+  </main>
+
+  <dialog class="admin-login" id="adminLogin">
+    <form class="admin-login__box" id="adminLoginForm" method="dialog">
+      <button class="icon-button admin-login__close" type="button" id="closeLogin" aria-label="Close admin login">x</button>
+      <p class="eyebrow">Admin Access</p>
+      <h2>Enter Password</h2>
+      <p class="admin-note">Manage the live menu items shown to QR visitors.</p>
+      <label class="form-field">
+        <span>Password</span>
+        <input id="adminPassword" type="password" placeholder="Enter admin password" autocomplete="current-password" required>
+      </label>
+      <p class="form-error" id="loginError" hidden>Wrong password. Try again.</p>
+      <button class="primary-button" type="submit">Login</button>
+    </form>
+  </dialog>
+
+  <section class="admin-panel" id="adminPanel" aria-label="Admin menu management" hidden>
+    <div class="admin-panel__header">
+      <div>
+        <p class="eyebrow">Admin Panel</p>
+        <h2>Menu Management</h2>
+      </div>
+      <div class="admin-actions">
+        <button class="secondary-button" id="enableSoundButton" type="button">Enable Sound</button>
+        <button class="secondary-button" id="logoutButton" type="button">Logout</button>
+      </div>
+    </div>
+
+    <form class="admin-form" id="menuForm">
+      <input id="editingId" type="hidden">
+      <label class="form-field">
+        <span>Item name</span>
+        <input id="itemName" type="text" placeholder="Example: Grilled Salmon" required>
+      </label>
+      <label class="form-field">
+        <span>Category</span>
+        <input id="itemCategory" type="text" placeholder="Example: Mains" required>
+      </label>
+      <label class="form-field">
+        <span>Price</span>
+        <input id="itemPrice" type="number" min="0" step="0.01" placeholder="29.99" required>
+      </label>
+      <div class="form-buttons">
+        <button class="primary-button" id="saveItemButton" type="submit">Add Item</button>
+        <button class="secondary-button" id="cancelEditButton" type="button" hidden>Cancel Edit</button>
+      </div>
+    </form>
+
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="adminTableBody"></tbody>
+      </table>
+    </div>
+
+    <section class="orders-panel" aria-label="Customer orders">
+      <div class="admin-panel__header">
+        <div>
+          <p class="eyebrow">Live Orders</p>
+          <h2>Customer Orders</h2>
+        </div>
+        <button class="secondary-button" id="refreshOrdersButton" type="button">Refresh Orders</button>
+      </div>
+      <div id="ordersList" class="orders-list"></div>
+      <p id="ordersEmpty" class="empty-state">No customer orders yet.</p>
+    </section>
+  </section>
+
+  <audio id="orderSound" src="assets/success.wav" preload="auto"></audio>
+  <script src="script.js"></script>
+</body>
+</html>
